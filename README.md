@@ -15,6 +15,7 @@ The following step is to split and feed our data to the predefined model, and fo
 - Labeled network flows, including full packet payloads in pcap format and CSV files for machine/deep learning purposes
 - Covered ten criteria as a reliable dataset: complete network configuration, complete traffic, labeled dataset, complete interaction, complete capture, available protocols, attack diversity, heterogeneity, feature set, and MetaData
 - Started at 9am on Monday, July 3, 2017 until 5pm on Friday July 7, 2017, for a total of 5 days
+
 ## Potential Results and Discussion:
 We expect high accuracy of identifying malicious traffic in both supervised and unsupervised learning. However, the normal traffic flows could be hard to accurately recognize because we prioritize training in attack features to avoid false negatives. To evaluate our machine learning algorithms, we will use a confusion matrix to easily extract false positives and false negatives proportions and to compute precision, recall, and accuracy of our model.
 
