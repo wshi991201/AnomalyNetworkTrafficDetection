@@ -1,7 +1,16 @@
+## Traffic Network Optimization
 
-#
 ### Introduction/Background:
 Due to nowadays' ever-growing network security concerns, an accurate and efficient way to distinguish normal activity flows from cyber attacks becomes exceedingly important. Our project will develop a trained machine in place of Intrusion Detection Systems (IDS) to monitor network traffic for suspicious activities. To decrease false alarms in IDS, we plan to investigate and contrast the influences of more than 80 features branched under some of the most common types of attacks – web-based, brute force, DoS (disk operating system), DDoS (distributed denial of service), infiltration, heart-bleed, bots, and portscan. Such a model would strengthen available defense tools against those sophisticated network attacks and alleviate burdens of website owners and administrators.
+
+### Problem Definition:
+We aim to build an IDS model to distinguish benign and potential anomaly network traffic. The goal is to minimize false positives while not permitting false negatives, or the most serious states of identifying malicious activity as acceptable.
+  
+### Methods:
+We plan to apply both unsupervised and supervised methodologies in analyzing the datasets. For unsupervised learning, K-means algorithm will be utilized to cluster different network activities based on distinct features. For supervised learning, we will construct regression models for different labels of attack types and normal activity. Scikit-learning provides well-implemented algorithms for regression, model selection, and etc. Therefore, we will use existing packages and libraries in Scikit-learning for convenience. Also, in order to extract the aforementioned 80 network traffic features from the dataset, we will use python package CICFlowMeter, which is a flow-based feature extractor and outputs the given pcap format file.
+The following step is to split and feed our data to the predefined model, and for a 5-day network flow, we will use the first three days for training and the last two days for testing.
+
+### Dataset:
 
 ### Markdown
 
