@@ -20,9 +20,27 @@ The following step is to split and feed our data to the predefined model, and fo
 We expect high accuracy of identifying malicious traffic in both supervised and unsupervised learning. However, the normal traffic flows could be hard to accurately recognize because we prioritize training in attack features to avoid false negatives. To evaluate our machine learning algorithms, we will use a confusion matrix to easily extract false positives and false negatives proportions and to compute precision, recall, and accuracy of our model.
 
 ## Proposed Timeline:
+- Project Proposal:
+  - Dataset, reference, and target problem (Yijie Gong, Wangzhuo Shi) - June 6th
+  - Proposal first draft and review (Feng Gao, Heeyong Huang) - June 10th
+  - 2-min presentation video (Zhenyu Chen) - June 13th
+- Midterm Report
+  - Dataset cleaning and feature selection (Yijie Gong) - June 22nd
+  - Supervised and unsupervised methods implementation (Feng Gao, Wangzhuo Shi) - June 29th
+  - Report first draft and model evaluation (Heeyong Huang, Zhenyu Chen) - July 4th
+  - Mid-term report final draft (Team) - July 6th
+- Final Report
+  - Parameter, code, and model optimization (Feng Gao, Yijie Gong) - July 13th
+  - Project final draft (Heeyong Huang, Wangzhuo Shi) - July 25th
+  - Final team video (Team) - July 29th
+
 
 ## References:
-- Iman Sharafaldin, Arash Habibi Lashkari, and Ali A. Ghorbani, “Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization”, 4th International Conference on Information Systems Security and Privacy (ICISSP), Portugal, January 2018
+- [Sharafaldin, I., Habibi Lashkari, A., & Ghorbani, A. A. (2018). Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization. In Proceedings of the 4th International Conference on Information Systems Security and Privacy. 4th International Conference on Information Systems Security and Privacy. SCITEPRESS - Science and Technology Publications.](https://doi.org/10.5220/0006639801080116)
+- [Erman, J., Arlitt, M., & Mahanti, A. (2006). Traffic classification using clustering algorithms. In Proceedings of the 2006 SIGCOMM workshop on Mining network data - MineNet ’06. the 2006 SIGCOMM workshop. ACM Press.](https://doi.org/10.1145/1162678.1162679)
+- [Disha, R. A., & Waheed, S. (2022). Performance analysis of machine learning models for intrusion detection system using Gini Impurity-based Weighted Random Forest (GIWRF) feature selection technique. In Cybersecurity (Vol. 5, Issue 1). Springer Science and Business Media LLC.](https://doi.org/10.1186/s42400-021-00103-8)
+- [Chitrakar, R., & Huang, C. (2012). Anomaly Based Intrusion Detection Using Hybrid Learning Approach of Combining k-Medoids Clustering and Naïve Bayes Classification. In 2012 8th International Conference on Wireless Communications, Networking and Mobile Computing. 2012 8th International Conference on Wireless Communications, Networking and Mobile Computing (WiCOM 2012). IEEE.](https://doi.org/10.1109/wicom.2012.6478433)
+
 
 
 
