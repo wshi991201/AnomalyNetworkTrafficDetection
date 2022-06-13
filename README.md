@@ -11,12 +11,29 @@ We plan to apply both unsupervised and supervised methodologies in analyzing the
 The following step is to split and feed our data to the predefined model, and for a 5-day network flow, we will use the first three days for training and the last two days for testing.
 
 ## Dataset:
-- Bulleted [Intrusion Detection Evaluation Dataset (CIC-IDS2017)](https://www.unb.ca/cic/datasets/ids-2017.html)
-- Bulleted Labeled network flows, including full packet payloads in pcap format and CSV files for machine/deep learning purposes
-- Bulleted Covered ten criteria as a reliable dataset: complete network configuration, complete traffic, labeled dataset, complete interaction, complete capture, available protocols, attack diversity, heterogeneity, feature set, and MetaData
-- Bulleted Started at 9am on Monday, July 3, 2017 until 5pm on Friday July 7, 2017, for a total of 5 days
+- [Intrusion Detection Evaluation Dataset (CIC-IDS2017)](https://www.unb.ca/cic/datasets/ids-2017.html)
+- Labeled network flows, including full packet payloads in pcap format and CSV files for machine/deep learning purposes
+- Covered ten criteria as a reliable dataset: complete network configuration, complete traffic, labeled dataset, complete interaction, complete capture, available protocols, attack diversity, heterogeneity, feature set, and MetaData
+- Started at 9am on Monday, July 3, 2017 until 5pm on Friday July 7, 2017, for a total of 5 days
 ## Potential Results and Discussion:
 We expect high accuracy of identifying malicious traffic in both supervised and unsupervised learning. However, the normal traffic flows could be hard to accurately recognize because we prioritize training in attack features to avoid false negatives. To evaluate our machine learning algorithms, we will use a confusion matrix to easily extract false positives and false negatives proportions and to compute precision, recall, and accuracy of our model.
+
+## Proposed Timeline:
+
+## References:
+- Iman Sharafaldin, Arash Habibi Lashkari, and Ali A. Ghorbani, “Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization”, 4th International Conference on Information Systems Security and Privacy (ICISSP), Portugal, January 2018
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
