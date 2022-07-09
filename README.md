@@ -5,10 +5,6 @@ Due to nowadays' ever-growing network security concerns, an accurate and efficie
 
 ## Problem Definition:
 We aim to build an IDS model to distinguish benign and potential anomaly network traffic. The goal is to minimize false positives while not permitting false negatives, or the most serious states of identifying malicious activity as acceptable.
-  
-## Methods:
-We plan to apply both unsupervised and supervised methodologies in analyzing the datasets. For unsupervised learning, K-means algorithm will be utilized to cluster different network activities based on distinct features. For supervised learning, we will construct regression models for different labels of attack types and normal activity. Scikit-learning provides well-implemented algorithms for regression, model selection, and etc. Therefore, we will use existing packages and libraries in Scikit-learning for convenience. Also, in order to extract the aforementioned 80 network traffic features from the dataset, we will use python package CICFlowMeter, which is a flow-based feature extractor and outputs the given pcap format file.
-The following step is to split and feed our data to the predefined model, and for a 5-day network flow, we will use the first three days for training and the last two days for testing.
 
 ## Dataset:
 - [Intrusion Detection Evaluation Dataset (CIC-IDS2017)](https://www.unb.ca/cic/datasets/ids-2017.html)
@@ -16,8 +12,57 @@ The following step is to split and feed our data to the predefined model, and fo
 - Covered ten criteria as a reliable dataset: complete network configuration, complete traffic, labeled dataset, complete interaction, complete capture, available protocols, attack diversity, heterogeneity, feature set, and MetaData
 - Started at 9am on Monday, July 3, 2017 until 5pm on Friday July 7, 2017, for a total of 5 days
 
-## Potential Results and Discussion:
-We expect high accuracy of identifying malicious traffic in both supervised and unsupervised learning. However, the normal traffic flows could be hard to accurately recognize because we prioritize training in attack features to avoid false negatives. To evaluate our machine learning algorithms, we will use a confusion matrix to easily extract false positives and false negatives proportions and to compute precision, recall, and accuracy of our model.
+## Methods and Discussions:
+### Data Cleaning
+Clean data is foundational to any data-driven project, and it is important we pay close attention to how data is structured and populated. Sometimes, data is found to be duplicated, corrupted, present in different or invalid data types, structurally wrong, out of scale or even erroneous. Our goal is to combine 5-day worth of network traffic data (2,830,743 x 79) into X_train, y_train, X_test, and y_test dataframes which are free of invalid entries and binary-labeled as ‘BENIGN’ or ‘ATTACK’.
+- **step 1**: Combining Mon-Fri Network Data<br/>
+The given dataset has each of the weekdays concentrated with different attack types, for example, Monday -- benign, Tuesday -- infiltration, Wednesday -- brute force, etc. However, we are only interested in generally detecting attacks from the benign data, so we vertically concatenate them all into a (2,830,743 x 79) matrix including 78 features and 1 label column.<br/><br/>
+- **step 2**: Remove Entries Containing NaN and Infinity Values<br/>
+In order to remove invalid entries, we first convert infinity values (too enormous to be represented by float 64 type) into NaN. Then altogether remove data rows containing NaN or/and infinity entries using pd.dropna() function. This reduces the total row from 2,830,743 to 2,827,876 where the eliminated 2,867 rows consist of 1,777 benign data and 1,090 attack data. Despite a higher attack ratio of invalid entries (1/3) than that of the total population (1/5), we consider that data removal is appropriate here because 3,000 is only a tiny subset of nearly 3 million data.<br/><br/>
+- **step 3**: Convert into a Binary Classification<br/>
+We replace all non-Benign labels with "Attack". These labels include Brute Force FTP, Brute Force SSH, DoS, Heartbleed, Web Attack, Infiltration, Botnet, and DDoS.<br/><br/>
+- **step 4**: Split Training and Testing Data<br/>
+After cleaning the dataset, we randomly dedicate 80 % of the dataset as training data and the remaining 20 % as testing dataset.
+
+### Feature Preprocessing – PCA
+We choose PCA to reduce dimensions while maximizing variance and preserving strong patterns in our dataset. We also considered backward and forward selections, but those two are too computationally expensive for our datasize. Our goal is to identify the number of principal components that would explain around 95% of the variation in the data.<br/><br/> Since principal component analysis applies to unsupervised/unlabeled data, we first standardize and transform 78 features from X_train and X_test to z-space; then we select top 30 features to achieve approxiamtely 95% cumulative explained variance as indicated by the plot. This feature extraction is extremely important as unsupervised clustering methods are more accurate with orthogonalized z-space features. In addition, a reduction of 48 features removes extra computational complexity.
+
+### Unsupervised Methods
+Since the dataset already provides corresponding labels, we plan to implement unsupervised methods merely to visualize the data points along with their neighboring distances and to compare with supervised methods.
+- **KMeans**<br/><br/>
+We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clustering algorithms, because it converges quickly to a sufficiently good solution for most applications. The K-Means algorithm randomly selects k cluster centers, with which data points are assigned. Optimization essentially minimizes total Euclidean distance between points and centers. The process iterates until the k-mean vectors converge to a steady-state, which signifies linear decision boundaries for cluster assignments.<br/><br/> Since our dataset is rather non-linear, we do not expect good clustering results for our data. After applying K-Means algorithm with k=2 and other default sklearn parameters, the distance plot suggests nearly 2 million predicted-benign data fall within the small orange, bottom-left cluster while the rest 10% are sparsely distributed along domain and range. We don’t run an elbow plot to determine k-parameter because on the contrary, we can compare output cluster assignments (array of 0s and 1s) with our y_label (converted as Attack → 0, Benign → 1) when k=2 assuming the predominant prediction will match to benign data. Indeed, the resulting confusion matrix and classification report suggest K-Means performs slightly better than guessing all inputs as benign and deviates far from our goal because more true attacks are predicted as benign than attack (project priority is minimizing false negatives).
+
+|                 | precision       | recall          | f1-score        | support         |
+| --------------- | --------------- | --------------- | --------------- | --------------- |
+| Attack         | 0.67           | 0.38           | 0.48           |  444896        |
+| Benign         | 0.86           | 0.95           | 0.91           | 1817404        |
+|                |                |                |                |                |
+| accuracy       |                |                | 0.84           | 2262300        |
+| macro avg      | 0.76           | 0.67           | 0.69           | 2262300        |
+| weighted avg   | 0.82           | 0.84           | 0.82           | 2262300        |
+- **Gaussian-Mixture Model**<br/><br/>
+We then move onto GMM, hoping for a similar process but as a soft-assignment including full covariance matrix, the algorithm would provide a higher accuracy and f-1 score especially for attack clusters assignment. The resulting distance plot and confusion matrix prove the opposite.<br/><br/>
+After the first failure, we increment n-components from 2 to 9 respectively, reasoning that clustering 8 different types of attacks together with a small n might have contributed to the poor result. However, attack clusters f-1 scores are approximately 0.1 for all 8 trials (attached below corresponds to n=2 only). The two final conclusions from GMM are: 1) benign data from our dataset clusters well together, but clustering algorithm is performing poorly on attack data; 2) running unsupervised methods on labeled data is truly non-ideal.
+
+|                 | precision       | recall          | f1-score        | support         |
+| --------------- | --------------- | --------------- | --------------- | --------------- |
+| Attack         | 0.11           | 0.11           | 0.11           |  444896        |
+| Benign         | 0.78           | 0.78           | 0.78           | 1817404        |
+|                |                |                |                |                |
+| accuracy       |                |                | 0.65           | 2262300        |
+| macro avg      | 0.45           | 0.45           | 0.45           | 2262300        |
+| weighted avg   | 0.65           | 0.65           | 0.65           | 2262300        |
+
+### Supervised Method
+Random Forest Classification is often praised for its accuracy and efficiency. Notably, random forest is faster on large datasets with more features than other supervised counterparts such as neural networks. Composed of many decision trees, random forest is consistent in outperforming single decision trees for classification problems.<br/><br/> On the very first run with n_estimators=20 and other default sklearn parameters, random forest classification produces nearly 1.00 f-1 scores on both attack and benign types. The given confusion matrix can demonstrate the promising result even better, mislabeling only 709 data out of 565,576 test data. Since its algorithm concept hasn’t been covered in class yet, we stop short of fine-tuning RF’s parameters. For future work, we plan to include k-fold validation and optimize supervised RF parameters to achieve an even lower false negative rate.
+|                 | precision       | recall          | f1-score        | support         |
+| --------------- | --------------- | --------------- | --------------- | --------------- |
+| Attack         | 0.9969         | 0.9968         | 0.9968         | 111667         |
+| Benign         | 0.9992         | 0.9992         | 0.9992         | 452909         |
+|                |                |                |                |                |
+| accuracy       |                |                | 0.9987         | 565576         |
+| macro avg      | 0.9980         | 0.9980         | 0.9980         | 565576         |
+| weighted avg   | 0.9987         | 0.9987         | 0.9987         | 565576         |
 
 ## Proposed Timeline:
 - Project Proposal:
