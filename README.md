@@ -25,12 +25,14 @@ We replace all non-Benign labels with "Attack". These labels include Brute Force
 After cleaning the dataset, we randomly dedicate 80 % of the dataset as training data and the remaining 20 % as testing dataset.
 
 ### Feature Preprocessing – PCA
-We choose PCA to reduce dimensions while maximizing variance and preserving strong patterns in our dataset. We also considered backward and forward selections, but those two are too computationally expensive for our datasize. Our goal is to identify the number of principal components that would explain around 95% of the variation in the data.<br/><br/> Since principal component analysis applies to unsupervised/unlabeled data, we first standardize and transform 78 features from X_train and X_test to z-space; then we select top 30 features to achieve approxiamtely 95% cumulative explained variance as indicated by the plot. This feature extraction is extremely important as unsupervised clustering methods are more accurate with orthogonalized z-space features. In addition, a reduction of 48 features removes extra computational complexity.
+We choose PCA to reduce dimensions while maximizing variance and preserving strong patterns in our dataset. We also considered backward and forward selections, but those two are too computationally expensive for our datasize. Our goal is to identify the number of principal components that would explain around 95% of the variation in the data.<br/><br/> Since principal component analysis applies to unsupervised/unlabeled data, we first standardize and transform 78 features from X_train and X_test to z-space; then we select top 30 features to achieve approxiamtely 95% cumulative explained variance as indicated by the plot. This feature extraction is extremely important as unsupervised clustering methods are more accurate with orthogonalized z-space features. In addition, a reduction of 48 features removes extra computational complexity.<br/><br/>
+![PCA plot](pca.PNG)
 
 ### Unsupervised Methods
 Since the dataset already provides corresponding labels, we plan to implement unsupervised methods merely to visualize the data points along with their neighboring distances and to compare with supervised methods.
 - **KMeans**<br/><br/>
-We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clustering algorithms, because it converges quickly to a sufficiently good solution for most applications. The K-Means algorithm randomly selects k cluster centers, with which data points are assigned. Optimization essentially minimizes total Euclidean distance between points and centers. The process iterates until the k-mean vectors converge to a steady-state, which signifies linear decision boundaries for cluster assignments.<br/><br/> Since our dataset is rather non-linear, we do not expect good clustering results for our data. After applying K-Means algorithm with k=2 and other default sklearn parameters, the distance plot suggests nearly 2 million predicted-benign data fall within the small orange, bottom-left cluster while the rest 10% are sparsely distributed along domain and range. We don’t run an elbow plot to determine k-parameter because on the contrary, we can compare output cluster assignments (array of 0s and 1s) with our y_label (converted as Attack → 0, Benign → 1) when k=2 assuming the predominant prediction will match to benign data. Indeed, the resulting confusion matrix and classification report suggest K-Means performs slightly better than guessing all inputs as benign and deviates far from our goal because more true attacks are predicted as benign than attack (project priority is minimizing false negatives).
+We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clustering algorithms, because it converges quickly to a sufficiently good solution for most applications. The K-Means algorithm randomly selects k cluster centers, with which data points are assigned. Optimization essentially minimizes total Euclidean distance between points and centers. The process iterates until the k-mean vectors converge to a steady-state, which signifies linear decision boundaries for cluster assignments.<br/><br/> Since our dataset is rather non-linear, we do not expect good clustering results for our data. After applying K-Means algorithm with k=2 and other default sklearn parameters, the distance plot suggests nearly 2 million predicted-benign data fall within the small orange, bottom-left cluster while the rest 10% are sparsely distributed along domain and range. We don’t run an elbow plot to determine k-parameter because on the contrary, we can compare output cluster assignments (array of 0s and 1s) with our y_label (converted as Attack → 0, Benign → 1) when k=2 assuming the predominant prediction will match to benign data. Indeed, the resulting confusion matrix and classification report suggest K-Means performs slightly better than guessing all inputs as benign and deviates far from our goal because more true attacks are predicted as benign than attack (project priority is minimizing false negatives).<br/><br/>
+![kMeans](kmeans.PNG)
 
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
@@ -42,7 +44,8 @@ We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clus
 | weighted avg   | 0.82           | 0.84           | 0.82           | 2262300        |
 - **Gaussian-Mixture Model**<br/><br/>
 We then move onto GMM, hoping for a similar process but as a soft-assignment including full covariance matrix, the algorithm would provide a higher accuracy and f-1 score especially for attack clusters assignment. The resulting distance plot and confusion matrix prove the opposite.<br/><br/>
-After the first failure, we increment n-components from 2 to 9 respectively, reasoning that clustering 8 different types of attacks together with a small n might have contributed to the poor result. However, attack clusters f-1 scores are approximately 0.1 for all 8 trials (attached below corresponds to n=2 only). The two final conclusions from GMM are: 1) benign data from our dataset clusters well together, but clustering algorithm is performing poorly on attack data; 2) running unsupervised methods on labeled data is truly non-ideal.
+After the first failure, we increment n-components from 2 to 9 respectively, reasoning that clustering 8 different types of attacks together with a small n might have contributed to the poor result. However, attack clusters f-1 scores are approximately 0.1 for all 8 trials (attached below corresponds to n=2 only). The two final conclusions from GMM are: 1) benign data from our dataset clusters well together, but clustering algorithm is performing poorly on attack data; 2) running unsupervised methods on labeled data is truly non-ideal.<br/><br/>
+![GMM](gmm.PNG)
 
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
@@ -54,7 +57,8 @@ After the first failure, we increment n-components from 2 to 9 respectively, rea
 | weighted avg   | 0.65           | 0.65           | 0.65           | 2262300        |
 
 ### Supervised Method
-Random Forest Classification is often praised for its accuracy and efficiency. Notably, random forest is faster on large datasets with more features than other supervised counterparts such as neural networks. Composed of many decision trees, random forest is consistent in outperforming single decision trees for classification problems.<br/><br/> On the very first run with n_estimators=20 and other default sklearn parameters, random forest classification produces nearly 1.00 f-1 scores on both attack and benign types. The given confusion matrix can demonstrate the promising result even better, mislabeling only 709 data out of 565,576 test data. Since its algorithm concept hasn’t been covered in class yet, we stop short of fine-tuning RF’s parameters. For future work, we plan to include k-fold validation and optimize supervised RF parameters to achieve an even lower false negative rate.
+Random Forest Classification is often praised for its accuracy and efficiency. Notably, random forest is faster on large datasets with more features than other supervised counterparts such as neural networks. Composed of many decision trees, random forest is consistent in outperforming single decision trees for classification problems.<br/><br/> On the very first run with n_estimators=20 and other default sklearn parameters, random forest classification produces nearly 1.00 f-1 scores on both attack and benign types. The given confusion matrix can demonstrate the promising result even better, mislabeling only 709 data out of 565,576 test data. Since its algorithm concept hasn’t been covered in class yet, we stop short of fine-tuning RF’s parameters. For future work, we plan to include k-fold validation and optimize supervised RF parameters to achieve an even lower false negative rate.<br/><br/>
+![Random Forest](RF_confusion.PNG)
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
 | Attack         | 0.9969         | 0.9968         | 0.9968         | 111667         |
@@ -81,51 +85,7 @@ Random Forest Classification is often praised for its accuracy and efficiency. N
 
 
 ## References:
-- [Sharafaldin, I., Habibi Lashkari, A., & Ghorbani, A. A. (2018). Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization. In Proceedings of the 4th International Conference on Information Systems Security and Privacy. 4th International Conference on Information Systems Security and Privacy. SCITEPRESS - Science and Technology Publications.](https://doi.org/10.5220/0006639801080116)
-- [Erman, J., Arlitt, M., & Mahanti, A. (2006). Traffic classification using clustering algorithms. In Proceedings of the 2006 SIGCOMM workshop on Mining network data - MineNet ’06. the 2006 SIGCOMM workshop. ACM Press.](https://doi.org/10.1145/1162678.1162679)
-- [Disha, R. A., & Waheed, S. (2022). Performance analysis of machine learning models for intrusion detection system using Gini Impurity-based Weighted Random Forest (GIWRF) feature selection technique. In Cybersecurity (Vol. 5, Issue 1). Springer Science and Business Media LLC.](https://doi.org/10.1186/s42400-021-00103-8)
-- [Chitrakar, R., & Huang, C. (2012). Anomaly Based Intrusion Detection Using Hybrid Learning Approach of Combining k-Medoids Clustering and Naïve Bayes Classification. In 2012 8th International Conference on Wireless Communications, Networking and Mobile Computing. 2012 8th International Conference on Wireless Communications, Networking and Mobile Computing (WiCOM 2012). IEEE.](https://doi.org/10.1109/wicom.2012.6478433)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/wshi991201/wshi991201.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+- Sharafaldin, I., Habibi Lashkari, A., & Ghorbani, A. A. (2018). Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization. In Proceedings of the 4th International Conference on Information Systems Security and Privacy. 4th International Conference on Information Systems Security and Privacy. SCITEPRESS - Science and Technology Publications.<br/>[https://doi.org/10.5220/0006639801080116](https://doi.org/10.5220/0006639801080116)
+- Erman, J., Arlitt, M., & Mahanti, A. (2006). Traffic classification using clustering algorithms. In Proceedings of the 2006 SIGCOMM workshop on Mining network data - MineNet ’06. the 2006 SIGCOMM workshop. ACM Press.<br/>[https://doi.org/10.1145/1162678.1162679](https://doi.org/10.1145/1162678.1162679)
+- Disha, R. A., & Waheed, S. (2022). Performance analysis of machine learning models for intrusion detection system using Gini Impurity-based Weighted Random Forest (GIWRF) feature selection technique. In Cybersecurity (Vol. 5, Issue 1). Springer Science and Business Media LLC.<br/>[https://doi.org/10.1186/s42400-021-00103-8](https://doi.org/10.1186/s42400-021-00103-8)
+- Chitrakar, R., & Huang, C. (2012). Anomaly Based Intrusion Detection Using Hybrid Learning Approach of Combining k-Medoids Clustering and Naïve Bayes Classification. In 2012 8th International Conference on Wireless Communications, Networking and Mobile Computing. 2012 8th International Conference on Wireless Communications, Networking and Mobile Computing (WiCOM 2012). IEEE.<br/>[https://doi.org/10.1109/wicom.2012.6478433](https://doi.org/10.1109/wicom.2012.6478433)
