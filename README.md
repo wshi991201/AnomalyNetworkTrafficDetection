@@ -34,6 +34,7 @@ Since the dataset already provides corresponding labels, we plan to implement un
 We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clustering algorithms, because it converges quickly to a sufficiently good solution for most applications. The K-Means algorithm randomly selects k cluster centers, with which data points are assigned. Optimization essentially minimizes total Euclidean distance between points and centers. The process iterates until the k-mean vectors converge to a steady-state, which signifies linear decision boundaries for cluster assignments.<br/><br/> Since our dataset is rather non-linear, we do not expect good clustering results for our data. After applying K-Means algorithm with k=2 and other default sklearn parameters, the distance plot suggests nearly 2 million predicted-benign data fall within the small orange, bottom-left cluster while the rest 10% are sparsely distributed along domain and range. We don’t run an elbow plot to determine k-parameter because on the contrary, we can compare output cluster assignments (array of 0s and 1s) with our y_label (converted as Attack → 0, Benign → 1) when k=2 assuming the predominant prediction will match to benign data. Indeed, the resulting confusion matrix and classification report suggest K-Means performs slightly better than guessing all inputs as benign and deviates far from our goal because more true attacks are predicted as benign than attack (project priority is minimizing false negatives).<br/><br/>
 ![kMeans](kmeans.PNG)
 
+
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
 | Attack         | 0.67           | 0.38           | 0.48           |  444896        |
@@ -47,6 +48,7 @@ We then move onto GMM, hoping for a similar process but as a soft-assignment inc
 After the first failure, we increment n-components from 2 to 9 respectively, reasoning that clustering 8 different types of attacks together with a small n might have contributed to the poor result. However, attack clusters f-1 scores are approximately 0.1 for all 8 trials (attached below corresponds to n=2 only). The two final conclusions from GMM are: 1) benign data from our dataset clusters well together, but clustering algorithm is performing poorly on attack data; 2) running unsupervised methods on labeled data is truly non-ideal.<br/><br/>
 ![GMM](gmm.PNG)
 
+
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
 | Attack         | 0.11           | 0.11           | 0.11           |  444896        |
@@ -59,6 +61,8 @@ After the first failure, we increment n-components from 2 to 9 respectively, rea
 ### Supervised Method
 Random Forest Classification is often praised for its accuracy and efficiency. Notably, random forest is faster on large datasets with more features than other supervised counterparts such as neural networks. Composed of many decision trees, random forest is consistent in outperforming single decision trees for classification problems.<br/><br/> On the very first run with n_estimators=20 and other default sklearn parameters, random forest classification produces nearly 1.00 f-1 scores on both attack and benign types. The given confusion matrix can demonstrate the promising result even better, mislabeling only 709 data out of 565,576 test data. Since its algorithm concept hasn’t been covered in class yet, we stop short of fine-tuning RF’s parameters. For future work, we plan to include k-fold validation and optimize supervised RF parameters to achieve an even lower false negative rate.<br/><br/>
 ![Random Forest](RF_confusion.PNG)
+
+
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
 | Attack         | 0.9969         | 0.9968         | 0.9968         | 111667         |
