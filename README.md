@@ -42,6 +42,7 @@ We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clus
 | accuracy       |                |                | 0.84           | 2262300        |
 | macro avg      | 0.76           | 0.67           | 0.69           | 2262300        |
 | weighted avg   | 0.82           | 0.84           | 0.82           | 2262300        |
+
 - **Gaussian-Mixture Model**<br/><br/>
 We then move onto GMM, hoping for a similar process but as a soft-assignment including full covariance matrix, the algorithm would provide a higher accuracy and f-1 score especially for attack clusters assignment. The resulting distance plot and confusion matrix prove the opposite.<br/><br/>
 After the first failure, we increment n-components from 2 to 9 respectively, reasoning that clustering 8 different types of attacks together with a small n might have contributed to the poor result. However, attack clusters f-1 scores are approximately 0.1 for all 8 trials (attached below corresponds to n=2 only). The two final conclusions from GMM are: 1) benign data from our dataset clusters well together, but clustering algorithm is performing poorly on attack data; 2) running unsupervised methods on labeled data is truly non-ideal.<br/><br/>
