@@ -64,11 +64,22 @@ Random Forest Classification is often praised for its accuracy and efficiency. N
 
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
-| Attack         | 0.9969         | 0.9969         | 0.9969         | 111667         |
-| Benign         | 0.9992         | 0.9992         | 0.9992         | 453909         |
-| accuracy       |                |                | 0.9988         | 565576         |
-| macro avg      | 0.9981         | 0.9981         | 0.9981         | 565576         |
-| weighted avg   | 0.9988         | 0.9988         | 0.9988         | 565576         |
+| BENIGN            | 0.9992         | 0.9992         | 0.9992         | 453915         |
+| Bot               | 0.6199         | 0.8526         | 0.7179         |    285         |
+| DDos              | 0.9989         | 0.9996         | 0.9993         |  25672         |
+| Dos GoldenEye     | 0.9788         | 0.9903         | 0.9845         |   2056         |
+| Dos Hulk          | 0.9985         | 0.9981         | 0.9983         |  46043         |
+| Dos Slowhttptest  | 0.9815         | 0.9843         | 0.9829         |   1080         |
+| Dos Slowloris     | 0.9820         | 0.9942         | 0.9880         |   1204         |
+| FTP-Patator       | 0.9944         | 0.9975         | 0.9959         |   1596         |
+| Heartbleed        | 0.5000         | 1.0000         | 0.6667         |      1         |
+| Infiltration      |    N/A         |    N/A         |    N/A         |      0         |
+| PortScan          | 0.9992         | 0.9937         | 0.9965         |  32115         |
+| SSH-Patator       | 0.9875         | 0.9933         | 0.9904         |   1192         |
+| Web Attack        | 0.9696         | 0.9952         | 0.9822         |    417         |
+| accuracy          |                |                | 0.9987         | 565576         |
+| macro avg         | 0.8469         | 0.9075         | 0.8694         | 565576         |
+| weighted avg      | 0.9988         | 0.9987         | 0.9987         | 565576         |
 
 ## Proposed Timeline:
 - Project Proposal:
