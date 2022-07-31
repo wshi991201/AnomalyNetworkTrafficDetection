@@ -37,11 +37,11 @@ We start with K-Means, one of the easiest, NP-hard, and efficient heuristic clus
 
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
-| Attack         | 0.67           | 0.38           | 0.48           |  444896        |
-| Benign         | 0.86           | 0.95           | 0.91           | 1817404        |
-| accuracy       |                |                | 0.84           | 2262300        |
-| macro avg      | 0.76           | 0.67           | 0.69           | 2262300        |
-| weighted avg   | 0.82           | 0.84           | 0.82           | 2262300        |
+| Attack         | 0.9974         | 0.9967         | 0.9970         | 111740         |
+| Benign         | 0.9992         | 0.9994         | 0.9993         | 453836         |
+| accuracy       |                |                | 0.9988         | 565576         |
+| macro avg      | 0.9983         | 0.9980         | 0.9982         | 565576         |
+| weighted avg   | 0.9988         | 0.9988         | 0.9988         | 565576         |
 
 - **Gaussian-Mixture Model**<br/><br/>
 We then move onto GMM, hoping for a similar process but as a soft-assignment including full covariance matrix, the algorithm would provide a higher accuracy and f-1 score especially for attack clusters assignment. The resulting distance plot and confusion matrix prove the opposite.<br/><br/>
@@ -51,11 +51,11 @@ After the first failure, we increment n-components from 2 to 9 respectively, rea
 
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
-| Attack         | 0.11           | 0.11           | 0.11           |  444896        |
-| Benign         | 0.78           | 0.78           | 0.78           | 1817404        |
-| accuracy       |                |                | 0.65           | 2262300        |
-| macro avg      | 0.45           | 0.45           | 0.45           | 2262300        |
-| weighted avg   | 0.65           | 0.65           | 0.65           | 2262300        |
+| Attack         | 0.9964         | 0.9963         | 0.9964         | 111678         |
+| Benign         | 0.9991         | 0.9991         | 0.9991         | 453898         |
+| accuracy       |                |                | 0.9986         | 565576         |
+| macro avg      | 0.9978         | 0.9977         | 0.9977         | 565576         |
+| weighted avg   | 0.9986         | 0.9986         | 0.9986         | 565576         |
 
 ### Supervised Method
 Random Forest Classification is often praised for its accuracy and efficiency. Notably, random forest is faster on large datasets with more features than other supervised counterparts such as neural networks. Composed of many decision trees, random forest is consistent in outperforming single decision trees for classification problems.<br/><br/> On the very first run with n_estimators=20 and other default sklearn parameters, random forest classification produces nearly 1.00 f-1 scores on both attack and benign types. The given confusion matrix can demonstrate the promising result even better, mislabeling only 709 data out of 565,576 test data. Since its algorithm concept hasn’t been covered in class yet, we stop short of fine-tuning RF’s parameters. For future work, we plan to include k-fold validation and optimize supervised RF parameters to achieve an even lower false negative rate.<br/><br/>
@@ -64,11 +64,11 @@ Random Forest Classification is often praised for its accuracy and efficiency. N
 
 |                 | precision       | recall          | f1-score        | support         |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
-| Attack         | 0.9969         | 0.9968         | 0.9968         | 111667         |
-| Benign         | 0.9992         | 0.9992         | 0.9992         | 452909         |
-| accuracy       |                |                | 0.9987         | 565576         |
-| macro avg      | 0.9980         | 0.9980         | 0.9980         | 565576         |
-| weighted avg   | 0.9987         | 0.9987         | 0.9987         | 565576         |
+| Attack         | 0.9969         | 0.9969         | 0.9969         | 111667         |
+| Benign         | 0.9992         | 0.9992         | 0.9992         | 453909         |
+| accuracy       |                |                | 0.9988         | 565576         |
+| macro avg      | 0.9981         | 0.9981         | 0.9981         | 565576         |
+| weighted avg   | 0.9988         | 0.9988         | 0.9988         | 565576         |
 
 ## Proposed Timeline:
 - Project Proposal:
