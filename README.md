@@ -51,7 +51,7 @@ Attached above is our very first Random Forest run with n_estimators=20 and othe
 In order to achieve an even lower false negative rate and to optimize random forest algorithm hyperparameters, we implement RandomizedSearchCV and GridSearchCV with focuses on n-estimator, max depth, min samples leaf, and min samples split. The RandomizedSearchCV, using 3-folds, closes in on hyperparameter values from hundreds of combinations out of the parameter grids, while GridSearchCV allows us to further narrow down the hyperparameter to more optimal values.
 
 The reason behind fine-tuning n-estimator, max depth, min samples leaf, and min samples split is that we believe reducing overfitting through post-pruning decision trees would effectively reduce the false negative rate, increasing their recall values. Indeed, cross validation gives us **{n_estimators=6, max_depth=42, min_samples_leaf=3, min_samples_split=10}** for a more optimal hyperparameter. The n-estimators reduce 20 decision trees down to 6; the deepest of the original 20 trees were limited from 55 to 42 layers; increase of numbers in min samples leaf and min samples split means stricter requirements to split a node. All these signify there is overfitting for our initial Random Forest run, and therefore, we further implement Random Forest and XGBoost with these values.<br/><br/>
-![Supervised Comparison 1](rf_xgb_compare.PNG)
+![Supervised Comparison 1](rf_xgb_compare.jpg)
 
 For attacks that are identified as benign, we successfully decrease counts from 342 to 291; however, the other values and specifically XGBoost are simply performing similarly, not better or worse in the scale of 565,576 test data.<br/><br/>
 ![Supervised Comparison 2](rf_xgb_compare_2.PNG)
